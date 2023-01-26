@@ -27,7 +27,7 @@ const useradd = asyncHandler(async (req, res) => {
       email,
       password,
       phone,
-      token
+      
       
     });
 
@@ -80,15 +80,35 @@ const useradd = asyncHandler(async (req, res) => {
 
       const updatenumber = asyncHandler(async (req, res) => 
       {
-        const { phones } = req.body.phone;
-        const {id} = req.body.id ;
+        const { id,phone } = req.body;
+       
+    
         
        const  data = await User.findOne({_id:id})
        if(data)
        {
-         const userdata = await User.findByIdAndUpdate({_id:id},{$set:{phone : phones}})
+      
+         const userdata = await User.findByIdAndUpdate({_id:id},{$set:{phone : phone}});
+         res.status(200).send({success:true,msg:"Done"}) ;
        }
+       else{
+        res.status(200).send({success:true,msg:" not Done"}) ;
+       }
+       
 
       })
+      const listuser = asyncHandler(async (req, res) => { 
+        const usedata = await User.find() ;
+        
+        res.json(usedata) ;
+      })
+      const listusername = asyncHandler(async (req, res) => { 
+      const {name} = req.body ;
+      
+      const namedata = await User.find({name:name}) ;
+      res.json(namedata) ;
+      })
 
-module.exports = {userlist,useradd,authUser,forget,updatenumber} ;
+
+
+module.exports = {userlist,useradd,authUser,forget,updatenumber,listuser,listusername} ;
